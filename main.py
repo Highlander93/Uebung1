@@ -10,7 +10,8 @@ def ask_for_path():
     # Use a breakpoint in the code line below to debug your script.
     print('Please insert path to data:')
     # path_to_data = input()
-    return "C:\\Users\\Müller\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
+    # return "C:\\Users\\Müller\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
+    return "C:\\Users\\muell\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
 
 
 def ask_for_unique_id():
