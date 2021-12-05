@@ -15,6 +15,8 @@ def start_client_socket():
         msg = msg.decode()
         print('Serverantwort: ' + msg)
 
+    clientsocket.close()
+
 
 if __name__ == '__main__':
     start_client_socket()

@@ -2,8 +2,8 @@
 
 # Press Umschalt+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-import server_socket
+import subprocess
+from sys import executable
 
 
 def ask_for_path():
@@ -34,17 +34,20 @@ def map_lines(nonempty_lines):
     return mapping_between_space[0], (mapping_result[0], mapping_result[1])
 
 
+def start_all_servers(datas):
+    subprocess.Popen([executable, 'start_all_servers.py', datas[0], datas[1]],
+                     creationflags=subprocess.CREATE_NEW_CONSOLE)
+
+
 def start_program():
     path_to_data = ask_for_path()
-    unique_id = ask_for_unique_id()
+    # unique_id = ask_for_unique_id()
     parsed_data = parse_data(path_to_data)
-    server_socket.start_server_socket(parsed_data[unique_id])
-    print(parsed_data[unique_id])
+    for x in range(1, len(parsed_data)+1):
+        start_all_servers(parsed_data[str(x)])
+    # server_socket.start_server_socket(parsed_data[unique_id])
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     start_program()
-
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
