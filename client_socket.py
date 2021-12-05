@@ -3,7 +3,7 @@ import socket
 
 def start_client_socket():
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientsocket.connect(('127.0.0.1', 2712))
+    clientsocket.connect(('127.0.0.1', 5001))
 
     while True:
         print('Bitte eine Message schreiben: ')
