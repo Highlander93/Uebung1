@@ -1,19 +1,18 @@
 import socket
+from datetime import datetime
 
 
 def start_client_socket():
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     clientsocket.connect(('127.0.0.1', 5001))
+    print('Bitte eine Message schreiben: ')
+    msg = input()
+    msg = msg.encode()
+    clientsocket.send(msg)
 
-    while True:
-        print('Bitte eine Message schreiben: ')
-        msg = input()
-        msg = msg.encode()
-        clientsocket.send(msg)
-
-        msg = clientsocket.recv(1024)
-        msg = msg.decode()
-        print('Serverantwort: ' + msg)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S:%f")
+    print("Current Time =", current_time)
 
     clientsocket.close()
 

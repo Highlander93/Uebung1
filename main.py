@@ -5,47 +5,39 @@
 import subprocess
 from sys import executable
 
+from graphviz import Source
+
+import read_and_parse_datafile
+
 
 def ask_for_path():
     # Use a breakpoint in the code line below to debug your script.
     print('Please insert path to data:')
     # path_to_data = input()
-    # return "C:\\Users\\Müller\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
-    return "C:\\Users\\muell\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
+    return "C:\\Users\\Müller\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
+    # return "C:\\Users\\muell\\PycharmProjects\\Uebung1\\PfadZurDatei\\data.txt"
 
 
-def ask_for_unique_id():
-    print('Please insert the unique ID for this program:')
-    # unique_id = input()
-    return "3"
+def start_all_servers(own_datas, path_to_data):
+    print("____________________")
+    print(own_datas)
+    subprocess.Popen([executable, 'start_all_servers.py', own_datas[0], own_datas[1], own_datas[2], path_to_data],
+                     creationflags=subprocess.CREATE_NEW_CONSOLE)
 
 
-def parse_data(path_to_data):
-    file = open(path_to_data)
-    nonempty_lines = [line.strip("\n") for line in file if line != "\n"]
-    mapped_lines = dict(map(map_lines, nonempty_lines))
-    file.close()
-    return mapped_lines
-
-
-def map_lines(nonempty_lines):
-    mapping_between_space = nonempty_lines.split(" ")
-    mapping_result = mapping_between_space[1].split(":")
-    return mapping_between_space[0], (mapping_result[0], mapping_result[1])
-
-
-def start_all_servers(datas):
-    subprocess.Popen([executable, 'start_all_servers.py', datas[0], datas[1]],
+def start_counting_server_for_servers_who_believe_rumor():
+    subprocess.Popen([executable, 'server_count_servers_who_believe_rumor.py'],
                      creationflags=subprocess.CREATE_NEW_CONSOLE)
 
 
 def start_program():
     path_to_data = ask_for_path()
-    # unique_id = ask_for_unique_id()
-    parsed_data = parse_data(path_to_data)
-    for x in range(1, len(parsed_data)+1):
-        start_all_servers(parsed_data[str(x)])
-    # server_socket.start_server_socket(parsed_data[unique_id])
+    parsed_data = read_and_parse_datafile.parse_data(path_to_data)
+
+    for x in range(0, len(parsed_data)):
+        start_all_servers(parsed_data[x], path_to_data)
+
+    #start_counting_server_for_servers_who_believe_rumor()
 
 
 # Press the green button in the gutter to run the script.
