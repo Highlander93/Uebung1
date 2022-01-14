@@ -9,21 +9,22 @@ from datetime import datetime
 from graphviz import Source
 
 import read_and_parse_datafile
+import tools
 
 already_known_rumor = ''
 already_known_rumor_counter = 0
-rumor_counter_to_believ = 3
+rumor_counter_to_believ = 2
 
 
 def on_new_client(clientsocket, servers_you_wanna_connect, own_datas, serversocket, address):
-    print('client connected\n')
+    print("\n" + tools.get_current_time() + ' client connected\n')
     msg = clientsocket.recv(1024)
     msg = msg.decode()
-    #print('Message: ' + msg)
 
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S:%f")
-    print("\nCurrent Time = " + current_time + "\n")
+    if str(msg).startswith('rumor: '):
+        print("\n" + tools.get_current_time() + ' Rumor : ' + "\"" + str(msg).split('rumor: ')[1] + "\"" + "\n")
+    else:
+        print("\n" + tools.get_current_time() + ' Message: ' + "\"" + msg + "\"" + "\n")
 
     if msg == 'read':
         #graphviz.render('dot', 'png', 'graph.dot').replace('\\', '/')
@@ -38,25 +39,23 @@ def on_new_client(clientsocket, servers_you_wanna_connect, own_datas, serversock
         kill_yourself()
 
     if str(msg).startswith('rumor: '):
-        print('Message: ' + msg + "\n")
         handle_rumor(msg, servers_you_wanna_connect, own_datas, address)
 
     clientsocket.close()
-    print('client disconnected')
+    print("\n" + tools.get_current_time() + ' client disconnected')
 
 
 def start_server_socket(own_datas, path_to_data):
     try:
-        just_send_your_id_once = True
+        just_send_your_id_once = False
         serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print('My ID: ' + own_datas[0])
+        #print('My ID: ' + own_datas[0])
         servers_you_wanna_connect = get_next_servers(own_datas, path_to_data)
-        print("Meine Nachbarn: " + str(servers_you_wanna_connect))
+        print("\n" + tools.get_current_time() + " Meine Nachbarn: " + str(servers_you_wanna_connect))
         serversocket.bind(('', int(own_datas[2])))
         serversocket.listen(5)
+        print("\n" + tools.get_current_time() + ' Waiting for client ...')
         while True:
-            print('Waiting for client ...')
-
             (clientsocket, address) = serversocket.accept()
 
             start_new_thread = threading.Thread(target=on_new_client,
@@ -68,7 +67,7 @@ def start_server_socket(own_datas, path_to_data):
                 if len(servers_you_wanna_connect) > 0:
                     for x in range(0, len(servers_you_wanna_connect)):
                         if servers_you_wanna_connect[x][0] != own_datas[0]:
-                            print(servers_you_wanna_connect[x][1] + ":" + servers_you_wanna_connect[x][2])
+                            print("\n" + tools.get_current_time() + servers_you_wanna_connect[x][1] + ":" + servers_you_wanna_connect[x][2])
                             neighbor_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                             neighbor_client_socket.connect(
                                 (str(servers_you_wanna_connect[x][1]), int(servers_you_wanna_connect[x][2])))
@@ -180,10 +179,7 @@ def kill_all_servers(msg, servers_you_wanna_connect, own_datas, address):
 
 
 def kill_yourself():
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S:%f")
-    print("Current Time =", current_time)
-    print('This Server is shutting down ...')
+    print("\n" + tools.get_current_time() + ' This Server is shutting down ...')
     time.sleep(10)
     os._exit(1)
 
@@ -200,7 +196,7 @@ def handle_rumor(msg, servers_you_wanna_connect, own_datas, address):
             tell_rumor(msg, servers_you_wanna_connect, own_datas, address)
 
         if already_known_rumor_counter == rumor_counter_to_believ:
-            print("I believing the rumor: " + already_known_rumor)
+            print("\n" + tools.get_current_time() + " I believing the rumor: " + already_known_rumor + "\n")
             send_your_id_to_counter_server(own_datas[0])
     except:
         print(sys.exc_info()[0])
@@ -208,7 +204,6 @@ def handle_rumor(msg, servers_you_wanna_connect, own_datas, address):
 
 
 def tell_rumor(rumor, servers_you_wanna_connect, own_datas, address):
-    print("tell_rumor")
     tell_anything_to_neighbors(rumor, servers_you_wanna_connect, own_datas, address)
 
 

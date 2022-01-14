@@ -4,8 +4,13 @@ from datetime import datetime
 import graphviz
 
 graph = graphviz.Graph('G', filename='./graphen/Graph_Aus_graphgen.dot', strict=True)
-n = 14
-m = 20
+#n = 7
+#m = 13
+
+print('Insert Nodes: ')
+n = int(input())
+print('Insert Edges: ')
+m = int(input())
 
 print(datetime.now())
 print('Getting random graph for ' + str(n) + ' nodes')
@@ -19,8 +24,8 @@ while number_of_edges < m:
     for i in range(1, n+1):
         while random_edge == i:
             random_edge = random.randrange(1, n)
-        while random_edge == 1:
-            random_edge = random.randrange(1, n)
+        #while random_edge == 1:
+        #    random_edge = random.randrange(1, n)
         graph.edge(str(i), str(random_edge))
         number_of_edges += 1
 
