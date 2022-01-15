@@ -4,7 +4,6 @@ import sys
 import threading
 import time
 import graphviz
-from datetime import datetime
 
 from graphviz import Source
 
@@ -13,18 +12,18 @@ import tools
 
 already_known_rumor = ''
 already_known_rumor_counter = 0
-rumor_counter_to_believ = 2
+rumor_counter_to_believ = 0
 
 
 def on_new_client(clientsocket, servers_you_wanna_connect, own_datas, serversocket, address):
-    print("\n" + tools.get_current_time() + ' client connected\n')
+    print("\n" + tools.get_current_time() + ' client connected', end="")
     msg = clientsocket.recv(1024)
     msg = msg.decode()
 
     if str(msg).startswith('rumor: '):
-        print("\n" + tools.get_current_time() + ' Rumor : ' + "\"" + str(msg).split('rumor: ')[1] + "\"" + "\n")
+        print("\n" + tools.get_current_time() + ' Rumor: ' + "\"" + str(msg).split('rumor: ')[1] + "\"", end="")
     else:
-        print("\n" + tools.get_current_time() + ' Message: ' + "\"" + msg + "\"" + "\n")
+        print("\n" + tools.get_current_time() + ' Message: ' + "\"" + msg + "\"", end="")
 
     if msg == 'read':
         #graphviz.render('dot', 'png', 'graph.dot').replace('\\', '/')
@@ -42,19 +41,21 @@ def on_new_client(clientsocket, servers_you_wanna_connect, own_datas, serversock
         handle_rumor(msg, servers_you_wanna_connect, own_datas, address)
 
     clientsocket.close()
-    print("\n" + tools.get_current_time() + ' client disconnected')
+    print("\n" + tools.get_current_time() + ' client disconnected', end="")
 
 
 def start_server_socket(own_datas, path_to_data):
+    global rumor_counter_to_believ
+    rumor_counter_to_believ = int(own_datas[3])
     try:
         just_send_your_id_once = False
         serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #print('My ID: ' + own_datas[0])
+        print("\n" + tools.get_current_time() + ' My ID: ' + own_datas[0], end="")
         servers_you_wanna_connect = get_next_servers(own_datas, path_to_data)
-        print("\n" + tools.get_current_time() + " Meine Nachbarn: " + str(servers_you_wanna_connect))
+        print("\n" + tools.get_current_time() + " Meine Nachbarn: " + str(servers_you_wanna_connect), end="")
         serversocket.bind(('', int(own_datas[2])))
         serversocket.listen(5)
-        print("\n" + tools.get_current_time() + ' Waiting for client ...')
+        print("\n" + tools.get_current_time() + ' Waiting for client ...', end="")
         while True:
             (clientsocket, address) = serversocket.accept()
 
@@ -67,7 +68,7 @@ def start_server_socket(own_datas, path_to_data):
                 if len(servers_you_wanna_connect) > 0:
                     for x in range(0, len(servers_you_wanna_connect)):
                         if servers_you_wanna_connect[x][0] != own_datas[0]:
-                            print("\n" + tools.get_current_time() + servers_you_wanna_connect[x][1] + ":" + servers_you_wanna_connect[x][2])
+                            print("\n" + tools.get_current_time() + servers_you_wanna_connect[x][1] + ":" + servers_you_wanna_connect[x][2], end="")
                             neighbor_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                             neighbor_client_socket.connect(
                                 (str(servers_you_wanna_connect[x][1]), int(servers_you_wanna_connect[x][2])))
@@ -179,7 +180,7 @@ def kill_all_servers(msg, servers_you_wanna_connect, own_datas, address):
 
 
 def kill_yourself():
-    print("\n" + tools.get_current_time() + ' This Server is shutting down ...')
+    print("\n" + tools.get_current_time() + ' This Server is shutting down ...', end="")
     time.sleep(10)
     os._exit(1)
 
@@ -196,7 +197,7 @@ def handle_rumor(msg, servers_you_wanna_connect, own_datas, address):
             tell_rumor(msg, servers_you_wanna_connect, own_datas, address)
 
         if already_known_rumor_counter == rumor_counter_to_believ:
-            print("\n" + tools.get_current_time() + " I believing the rumor: " + already_known_rumor + "\n")
+            print("\n" + tools.get_current_time() + " I believing the rumor: " + "\"" + already_known_rumor + "\"", end="")
             send_your_id_to_counter_server(own_datas[0])
     except:
         print(sys.exc_info()[0])

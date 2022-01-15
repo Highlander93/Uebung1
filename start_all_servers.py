@@ -4,7 +4,6 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 import sys
-import time
 
 import server_socket
 
@@ -14,6 +13,7 @@ def parse_input():
     parsed_input.append(sys.argv[1])
     parsed_input.append(sys.argv[2])
     parsed_input.append(sys.argv[3])
+    parsed_input.append(sys.argv[5])
     return parsed_input
 
 

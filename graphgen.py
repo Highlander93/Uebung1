@@ -7,9 +7,9 @@ graph = graphviz.Graph('G', filename='./graphen/Graph_Aus_graphgen.dot', strict=
 #n = 7
 #m = 13
 
-print('Insert Nodes: ')
+print('Insert Nodes: ', end="")
 n = int(input())
-print('Insert Edges: ')
+print('Insert Edges: ', end="")
 m = int(input())
 
 print(datetime.now())
