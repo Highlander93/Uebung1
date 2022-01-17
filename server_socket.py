@@ -68,7 +68,8 @@ def start_server_socket(own_datas, path_to_data):
                 if len(servers_you_wanna_connect) > 0:
                     for x in range(0, len(servers_you_wanna_connect)):
                         if servers_you_wanna_connect[x][0] != own_datas[0]:
-                            print("\n" + tools.get_current_time() + servers_you_wanna_connect[x][1] + ":" + servers_you_wanna_connect[x][2], end="")
+                            print("\n" + tools.get_current_time() + servers_you_wanna_connect[x][1] + ":" +
+                                  servers_you_wanna_connect[x][2], end="")
                             neighbor_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                             neighbor_client_socket.connect(
                                 (str(servers_you_wanna_connect[x][1]), int(servers_you_wanna_connect[x][2])))
@@ -197,7 +198,8 @@ def handle_rumor(msg, servers_you_wanna_connect, own_datas, address):
             tell_rumor(msg, servers_you_wanna_connect, own_datas, address)
 
         if already_known_rumor_counter == rumor_counter_to_believ:
-            print("\n" + tools.get_current_time() + " I believing the rumor: " + "\"" + already_known_rumor + "\"", end="")
+            print("\n" + tools.get_current_time() + " I believing the rumor: " + "\"" +
+                  already_known_rumor + "\"", end="")
             send_your_id_to_counter_server(own_datas[0])
     except:
         print(sys.exc_info()[0])

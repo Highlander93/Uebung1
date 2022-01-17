@@ -19,11 +19,11 @@ for i in range(1, n+1):
     graph.node(str(i), str(i))
 
 number_of_edges = 0
-random_edge = random.randrange(1, n)
+random_edge = random.randrange(1, n+1, 1)
 while number_of_edges < m:
     for i in range(1, n+1):
         while random_edge == i:
-            random_edge = random.randrange(1, n)
+            random_edge = random.randrange(1, n+1, 1)
         #while random_edge == 1:
         #    random_edge = random.randrange(1, n)
         graph.edge(str(i), str(random_edge))

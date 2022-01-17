@@ -43,7 +43,7 @@ def on_new_client(clientsocket, hi):
         list_server_who_believe.append(msg)
         counter_server_who_believe_rumor += 1
         #print('ID von Server: ' + str(msg))
-        print('Es glauben aktuell das Gerücht: ' + str(counter_server_who_believe_rumor) + " Server")
+        print(msg)
     clientsocket.close()
 
 
